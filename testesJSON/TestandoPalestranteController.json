@@ -1,0 +1,24 @@
+{
+    "Nome": "Bruno santos",
+    "MiniCurriculo": "blablabla",
+    "ImagemURL": "brunoimg.PNG",
+    "Telefone": "1140028922",
+    "Email": "a@a.com",
+    "RedesSociais": [],
+    "PalestrantesEventos": []
+}
+
+{
+    "Nome": "Daniel",
+    "MiniCurriculo": "blablabla",
+    "ImagemURL": "img1.jpg",
+    "Telefone": "1140028922",
+    "Email": "a@a.com",
+    "RedesSociais": [
+        {
+            "nome": "Facebook",
+            "URL": "facebook.com.br/aaabbbccc"
+        }
+    ],
+    "PalestrantesEventos": []
+}
