@@ -70,6 +70,7 @@ namespace ProjAgil.WebAPI.Controllers
         {   
             try
             {
+                
                 _repo.Add(model);
 
                 if(await _repo.SaveChangesAsync())
@@ -81,14 +82,14 @@ namespace ProjAgil.WebAPI.Controllers
             catch (System.Exception)
             {
 
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Bando de dados falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de dados falhou");
             }
 
             return BadRequest();
             
         }
 
-        [HttpPut]
+        [HttpPut("{EventoId}")]
         public async Task<IActionResult> Put(int EventoId, Evento model)
         {   
             try
@@ -115,7 +116,7 @@ namespace ProjAgil.WebAPI.Controllers
             
         }
 
-        [HttpDelete]
+        [HttpDelete("{EventoId}")]
         public async Task<IActionResult> Delete(int EventoId)
         {   
             try
