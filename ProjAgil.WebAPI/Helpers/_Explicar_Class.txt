@@ -1,0 +1,1 @@
+classe onde você irá criar o mapeamento(filtro) das classes do dominio com as classes de Dto

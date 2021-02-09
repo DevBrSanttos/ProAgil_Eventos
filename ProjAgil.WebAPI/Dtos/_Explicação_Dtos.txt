@@ -1,0 +1,7 @@
+Dto -> Data transfer Object
+Esta pasta serve para retornar campos pré definidos das classes, grande exemplo é a classe
+RedeSocialDto que retorna somente os campos "Nome" e "URL".
+faz tal função usando o AutoMapper
+
+obs: precisa ser adicionado o package do AutoMapper usando o NuGet(ctrl + shift + p)
+AutoMapper.Extensions.Microsoft.DependencyInjection
