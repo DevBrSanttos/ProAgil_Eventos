@@ -31,6 +31,7 @@ namespace ProjAgil.WebAPI
             //conexao com banco de dados
             services.AddDbContext<ProAgilContext>(
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            //quando chamar algum metodo da interface será substituida pelo metodo do repository
             services.AddScoped<IProAgilRepository, ProAgilRepository>();
              // dizer para a aplicação que está trabalhando com autoMapper
              //(precisa ser antes do Mvc)

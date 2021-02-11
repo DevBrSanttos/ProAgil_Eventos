@@ -34,7 +34,6 @@ namespace ProjAgil.WebAPI.Controllers
             }
             catch (System.Exception)
             {
-
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Bando de dados falhou");
             }
             
