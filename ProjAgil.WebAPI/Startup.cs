@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ProAgil.Repository;
@@ -33,6 +36,7 @@ namespace ProjAgil.WebAPI
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             //quando chamar algum metodo da interface será substituida pelo metodo do repository
             services.AddScoped<IProAgilRepository, ProAgilRepository>();
+            
              // dizer para a aplicação que está trabalhando com autoMapper
              //(precisa ser antes do Mvc)
             services.AddAutoMapper();            
@@ -58,6 +62,10 @@ namespace ProjAgil.WebAPI
            //app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions(){
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
             app.UseMvc();
         }
     }

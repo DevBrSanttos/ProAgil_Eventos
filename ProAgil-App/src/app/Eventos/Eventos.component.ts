@@ -17,18 +17,26 @@ defineLocale('pt-br', ptBrLocale); //definindo o datepicker para portugues
   styleUrls: ['./eventos.component.css']
 })
 export class EventosComponent implements OnInit {
+
   titulo = "Eventos";
+
   eventosFiltrados: Evento[] = [];
   eventos: Evento[] = [];
   evento!: Evento;
   modoSalvar = "";
-  bodyDeletarEvento = "";
+
   imagemLargura = 50;
   imagemMargem = 2;
-  mostrarImagem = false;
+  mostrarImagem = false;  
   registerForm!: FormGroup;
+  bodyDeletarEvento = "";
+
+  file: File | undefined;
+  fileNameToUpload!: string;
+  dataAtual!: string;
 
   _filtroLista: any;
+  
 
   constructor(
     private eventoService: EventoService, //carregar URL do back-and
@@ -86,7 +94,9 @@ export class EventosComponent implements OnInit {
     editarEvento(template: any, evento: Evento){
       this.modoSalvar = "put";
       this.openModal(template);
-      this.evento = evento;
+      this.evento = Object.assign({}, evento);
+      this.fileNameToUpload = evento.imagemURL.toString();
+      this.evento.imagemURL = '';
       this.registerForm.patchValue(this.evento);
     }
 
@@ -95,10 +105,37 @@ export class EventosComponent implements OnInit {
       this.openModal(template);
     }
 
+    uploadImagem(){
+      if(this.modoSalvar === "post"){
+        //dar um split no caminho da imagem para pegar somente o nome dela e não o caminho todo
+        //caminho padrão -> "c:\fakeFolder\nomeImg.jpg"
+        const nomeArquivo = this.evento.imagemURL.split("\\", 3);
+        this.evento.imagemURL = nomeArquivo[2];
+        this.eventoService.postUpload(this.file, nomeArquivo[2]).subscribe(
+          () => {
+            this.dataAtual = new Date().getMilliseconds().toString();
+            this.getEventos();
+          }
+        );
+      }else{
+        this.evento.imagemURL = this.fileNameToUpload;
+        this.eventoService.postUpload(this.file, this.fileNameToUpload).subscribe(
+          () => {
+            this.dataAtual = new Date().getMilliseconds().toString();
+            this.getEventos();
+          }
+        );
+      }
+      
+      
+    }
+
     salvarAlteracao(template: any){      
       if(this.registerForm.valid){        
         if(this.modoSalvar === "post"){
           this.evento = Object.assign({}, this.registerForm.value);
+          this.uploadImagem();
+
           this.eventoService.postEvento(this.evento).subscribe(()  => {
               template.hide(); //fechar template
               this.getEventos(); // atualizar lista
@@ -110,6 +147,8 @@ export class EventosComponent implements OnInit {
           );
         }else{
           this.evento = Object.assign({id: this.evento.id}, this.registerForm.value);
+          this.uploadImagem();
+
           this.eventoService.putEvento(this.evento).subscribe(()  => {              
               template.hide(); //fechar template
               this.getEventos(); // atualizar lista
@@ -121,6 +160,15 @@ export class EventosComponent implements OnInit {
           );
         }
 
+      }
+    }
+
+
+
+    onFileChange(event: any){
+      const reader = new FileReader();
+      if(event.target?.files && event.target?.files.length){
+        this.file = event.target?.files;
       }
     }
     //deletar evento
